@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Love Animation ❤️</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #050005;
+    overflow: hidden;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#scene {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    perspective: 800px;
+}
+
+#heart {
+    position: relative;
+    width: 300px;
+    height: 300px;
+    transform-style: preserve-3d;
+    animation: beat 1.2s ease-in-out infinite;
+}
+
+.word {
+    position: absolute;
+    color: #ff80bf;
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    white-space: nowrap;
+    text-shadow: 0 0 8px #ff1493, 0 0 16px #ff1493;
+    animation: glow 0.8s ease-in-out infinite alternate;
+}
+
+@keyframes beat {
+    0%, 100% {
+        transform: scale(1) rotateY(-10deg);
+    }
+    50% {
+        transform: scale(1.08) rotateY(10deg);
+    }
+}
+
+@keyframes glow {
+    from {
+        opacity: 0.3;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.particle {
+    position: absolute;
+    bottom: -30px;
+    color: #ff4da6;
+    font-size: 20px;
+    text-shadow: 0 0 10px #ff1493;
+    animation: rise 4s linear forwards;
+    pointer-events: none;
+}
+
+@keyframes rise {
+    0% {
+        transform: translateY(0) rotate(0deg) scale(0.5);
+        opacity: 0;
+    }
+    15% {
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-100vh) rotate(360deg) scale(1.5);
+        opacity: 0;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div id="scene">
+    <div id="heart"></div>
+</div>
+
+<script>
+const heart = document.getElementById("heart");
+const scene = document.getElementById("scene");
+
+function drawHeart() {
+    heart.innerHTML = "";
+
+    const total = 500;
+    const scale = Math.min(
+        window.innerWidth / 42,
+        window.innerHeight / 40,
+        10
+    );
+
+    for (let i = 0; i < total; i++) {
+        const t = i / total * Math.PI * 2;
+
+        const x = 16 * Math.pow(Math.sin(t), 3);
+
+        const y =
+            13 * Math.cos(t)
+            - 5 * Math.cos(2 * t)
+            - 2 * Math.cos(3 * t)
+            - Math.cos(4 * t);
+
+        const word = document.createElement("span");
+
+        word.className = "word";
+        word.textContent = "I love you";
+
+        word.style.left = (150 + x * scale) + "px";
+        word.style.top = (150 - y * scale) + "px";
+
+        word.style.animationDelay = (Math.random() * -2) + "s";
+
+        heart.appendChild(word);
+    }
+}
+
+function makeParticle() {
+    const p = document.createElement("span");
+
+    p.className = "particle";
+    p.textContent = Math.random() > 0.5 ? "♥" : "❤️";
+
+    p.style.left = Math.random() * 100 + "vw";
+    p.style.animationDuration = (3 + Math.random() * 3) + "s";
+
+    scene.appendChild(p);
+
+    setTimeout(() => p.remove(), 6500);
+}
+
+drawHeart();
+
+setInterval(makeParticle, 180);
+
+window.addEventListener("resize", drawHeart);
+</script>
+
+</body>
+</html>
